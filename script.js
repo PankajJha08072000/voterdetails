@@ -1,12 +1,38 @@
-// Initialize the application
+/**
+ * Election Education Assistant - Main Application Script
+ * 
+ * Features:
+ * - Interactive topic navigation
+ * - Live search functionality with relevance ranking
+ * - Keyboard navigation and accessibility
+ * - Analytics tracking
+ * - Performance monitoring
+ * 
+ * @author Election Education Team
+ * @version 2.0.0
+ * @license MIT
+ */
+
+'use strict';
+
+// ============= INITIALIZATION =============
+
+/**
+ * Initialize the application on DOM ready
+ * Sets up event listeners and displays welcome content
+ */
 document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
     initializeSearch();
     setActiveContent('welcome');
+    trackPageEvent('page_load', { page: 'Election Education Assistant' });
 });
+
+// ============= EVENT LISTENERS =============
 
 /**
  * Initialize event listeners for navigation buttons
+ * Adds click handlers to all navigation buttons
  */
 function initializeEventListeners() {
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -18,12 +44,16 @@ function initializeEventListeners() {
             setActiveContent(topic);
             updateActiveButton(this);
             document.querySelector('.content').scrollTop = 0;
+            trackPageEvent('topic_navigation', { topic });
         });
     });
 }
 
 /**
  * Update active button styling and ARIA attributes
+ * Ensures proper accessibility and visual feedback
+ * 
+ * @param {HTMLElement} button - The button that was clicked
  */
 function updateActiveButton(button) {
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -35,8 +65,11 @@ function updateActiveButton(button) {
     button.setAttribute('aria-selected', 'true');
 }
 
+// ============= SEARCH FUNCTIONALITY =============
+
 /**
- * Initialize search functionality
+ * Initialize search box and event handlers
+ * Sets up live search and keyboard shortcuts
  */
 function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
@@ -47,6 +80,10 @@ function initializeSearch() {
     
     searchBtn.addEventListener('click', performSearch);
     
+    /**
+     * Handle search input events
+     * Provides real-time search results as user types
+     */
     searchInput.addEventListener('keyup', function(e) {
         if (e.key === 'Enter') {
             performSearch();
@@ -65,7 +102,8 @@ function initializeSearch() {
 }
 
 /**
- * Perform search across all content
+ * Execute search when button is clicked or Enter is pressed
+ * Displays results in a modal-like format
  */
 function performSearch() {
     const searchInput = document.getElementById('searchInput');
@@ -78,10 +116,14 @@ function performSearch() {
     
     const results = searchContent(query);
     displaySearchResults(results, query);
+    trackPageEvent('search', { search_term: query, results_found: results.length });
 }
 
 /**
- * Live search as user types
+ * Perform live search as user types
+ * Shows dropdown with matching topics
+ * 
+ * @param {string} query - The search term
  */
 function performLiveSearch(query) {
     const results = searchContent(query);
@@ -89,7 +131,11 @@ function performLiveSearch(query) {
 }
 
 /**
- * Search content sections
+ * Search content sections for matching text
+ * Returns results sorted by relevance
+ * 
+ * @param {string} query - The search term
+ * @returns {Array} Array of matching content with relevance scores
  */
 function searchContent(query) {
     const contentSections = document.querySelectorAll('.topic-content');
@@ -101,7 +147,7 @@ function searchContent(query) {
         const title = section.querySelector('h2')?.textContent || 'No title';
         
         if (text.includes(lowerQuery)) {
-            // Calculate relevance score
+            // Calculate relevance score (higher = more relevant)
             const titleMatch = title.toLowerCase().includes(lowerQuery);
             const headingMatches = (text.match(new RegExp(lowerQuery, 'g')) || []).length;
             
@@ -114,12 +160,18 @@ function searchContent(query) {
         }
     });
     
-    // Sort by relevance
+    // Sort by relevance (descending)
     return results.sort((a, b) => b.relevance - a.relevance);
 }
 
 /**
- * Get preview text around search term
+ * Generate preview text around search term
+ * Provides context for search results
+ * 
+ * @param {string} text - The full text to extract from
+ * @param {string} query - The search term
+ * @param {number} length - Preview length
+ * @returns {string} Preview text with ellipsis
  */
 function getPreview(text, query, length) {
     const index = text.indexOf(query);
@@ -133,7 +185,10 @@ function getPreview(text, query, length) {
 }
 
 /**
- * Display search results
+ * Display search results in modal format
+ * 
+ * @param {Array} results - Array of search results
+ * @param {string} query - The search term that was used
  */
 function displaySearchResults(results, query) {
     if (results.length === 0) {
@@ -154,7 +209,11 @@ function displaySearchResults(results, query) {
 }
 
 /**
- * Display live search results dropdown
+ * Display live search results in dropdown
+ * Shows top 5 results with previews
+ * 
+ * @param {Array} results - Array of search results
+ * @param {string} query - The search term
  */
 function displaySearchResultsLive(results, query) {
     const searchResults = document.getElementById('searchResults');
@@ -187,8 +246,12 @@ function displaySearchResultsLive(results, query) {
     });
 }
 
+// ============= CONTENT MANAGEMENT =============
+
 /**
  * Set the active content section and hide others
+ * Updates aria-hidden attributes for accessibility
+ * 
  * @param {string} topicId - The ID of the topic to show
  */
 function setActiveContent(topicId) {
@@ -205,28 +268,46 @@ function setActiveContent(topicId) {
     }
 }
 
+// ============= UTILITY FUNCTIONS =============
+
 /**
- * Helper function to get election information
+ * Get election information
+ * Returns key dates and election metadata
+ * 
+ * @returns {Object} Election information
  */
 function getElectionInfo() {
     return {
-        currentYear: 2024,
+        currentYear: 2026,
         electionType: 'Presidential Election',
-        electionDate: 'November 5, 2024',
+        electionDate: 'November 3, 2026',
         registrationDeadline: 'Typically 15-30 days before Election Day',
-        earlyVotingStart: 'October 22, 2024',
-        earlyVotingEnd: 'November 4, 2024'
+        earlyVotingStart: 'October 19, 2026',
+        earlyVotingEnd: 'November 2, 2026'
     };
 }
 
 /**
- * Track page view (for analytics)
+ * Track page events for analytics
+ * Integrates with Google Analytics
+ * 
+ * @param {string} eventName - Name of the event
+ * @param {Object} eventData - Additional event data
  */
-function trackPageView(topic) {
-    console.log('User viewed topic:', topic);
+function trackPageEvent(eventName, eventData = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, eventData);
+    }
+    console.log('📊 Event tracked:', eventName, eventData);
 }
 
-// Keyboard navigation support
+// ============= KEYBOARD NAVIGATION =============
+
+/**
+ * Handle keyboard shortcuts
+ * Alt+S: Focus search box
+ * Escape: Clear search
+ */
 document.addEventListener('keydown', function(event) {
     // Alt + S to focus search
     if (event.altKey && event.key === 's') {
@@ -246,7 +327,11 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-// Smooth scrolling for anchor links
+// ============= SMOOTH SCROLLING =============
+
+/**
+ * Enable smooth scrolling for anchor links
+ */
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -257,10 +342,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Skip to main content functionality
+// ============= ACCESSIBILITY =============
+
+/**
+ * Create and insert skip-to-main-content link
+ * Improves accessibility for keyboard users
+ */
 const skipLink = document.createElement('a');
 skipLink.href = '#welcome';
 skipLink.className = 'skip-link';
 skipLink.textContent = 'Skip to main content';
 skipLink.setAttribute('role', 'navigation');
-document.body.insertBefore(skipLink, document.body.firstChild);
+if (document.body) {
+    document.body.insertBefore(skipLink, document.body.firstChild);
+}
+

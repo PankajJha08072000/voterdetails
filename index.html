@@ -1,9 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Education Assistant</title>
+    <meta name="description" content="Interactive Election Education Assistant - Learn about voter registration, voting methods, election timelines, and your voting rights. Comprehensive, nonpartisan voter education for all.">
+    <meta name="keywords" content="election, voting, voter education, registration, elections, civics">
+    <meta name="author" content="Election Education Team">
+    <meta name="theme-color" content="#1e40af">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' www.googletagmanager.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; connect-src 'self' www.google-analytics.com www.googletagmanager.com">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Election Education Assistant">
+    <meta property="og:description" content="Interactive guide to understanding elections, voting, and civic participation.">
+    <meta property="og:url" content="https://storage.googleapis.com/voterdetails-election-app/">
+    <meta property="og:site_name" content="Election Education Assistant">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Election Education Assistant">
+    <meta name="twitter:description" content="Learn about elections and voting in an interactive, easy-to-understand way.">
+    
+    <!-- Title & Styles -->
+    <title>Election Education Assistant - Learn About Voting & Elections</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -486,5 +509,38 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="tests.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELECTION-APP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ELECTION-APP', {
+            'page_path': window.location.pathname,
+            'page_title': 'Election Education Assistant'
+        });
+        
+        // Track topic views
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                gtag('event', 'view_topic', {
+                    'topic': this.getAttribute('data-topic')
+                });
+            });
+        });
+        
+        // Track search usage
+        const searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                const query = document.getElementById('searchInput').value;
+                gtag('event', 'search', {
+                    'search_term': query
+                });
+            });
+        }
+    </script>
 </body>
 </html>
