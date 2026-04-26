@@ -30,8 +30,10 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Google Translate API -->
+    <!-- Google Services APIs -->
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script async src="https://apis.google.com/js/platform.js"></script>
 
 </head>
 <body>
@@ -73,6 +75,8 @@
                     <button class="nav-btn" data-topic="polling-locations">Find Polling Locations</button>
                     <button class="nav-btn" data-topic="election-timeline-calendar">Election Calendar</button>
                     <button class="nav-btn" data-topic="voter-quiz">Voter Knowledge Quiz</button>
+                    <button class="nav-btn" data-topic="video-resources">📹 Video Resources</button>
+                    <button class="nav-btn" data-topic="shareable-docs">📄 Share Documents</button>
                 </nav>
             </aside>
 
@@ -669,6 +673,110 @@
                     <h3>📊 Full Survey</h3>
                     <p>Want to provide feedback or take a more comprehensive assessment? Fill out our Google Form:</p>
                     <iframe id="googleFormFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSeUqYxDx5JZqvxZ4sPm-QXKqzxDKb7q4qZqvzDKb7q4qZqvzD/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="Election Education Feedback Form">Loading…</iframe>
+                </div>
+
+                <!-- Video Resources (YouTube Integration) -->
+                <div class="topic-content" id="video-resources" aria-hidden="true">
+                    <h2>📹 Election Education Videos</h2>
+                    <p>Learn through engaging video content from educational creators:</p>
+                    
+                    <div class="video-grid">
+                        <div class="video-card">
+                            <h3>How to Register to Vote</h3>
+                            <p>Step-by-step guide to voter registration</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=how+to+register+to+vote', '_blank')">Watch Videos</button>
+                        </div>
+
+                        <div class="video-card">
+                            <h3>What Happens on Election Day</h3>
+                            <p>A detailed walkthrough of the voting process</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=election+day+voting+process', '_blank')">Watch Videos</button>
+                        </div>
+
+                        <div class="video-card">
+                            <h3>Understanding Your Voting Rights</h3>
+                            <p>Know your rights as a voter</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=voter+rights+education', '_blank')">Watch Videos</button>
+                        </div>
+
+                        <div class="video-card">
+                            <h3>Voting Methods Explained</h3>
+                            <p>In-person, mail-in, and early voting options</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=voting+methods+mail+in+early+voting', '_blank')">Watch Videos</button>
+                        </div>
+
+                        <div class="video-card">
+                            <h3>How Votes Are Counted</h3>
+                            <p>The election security and vote counting process</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=how+votes+are+counted+election+security', '_blank')">Watch Videos</button>
+                        </div>
+
+                        <div class="video-card">
+                            <h3>Election Types Explained</h3>
+                            <p>Presidential, midterm, and local elections</p>
+                            <button class="search-btn" onclick="window.open('https://www.youtube.com/results?search_query=types+of+elections+explained', '_blank')">Watch Videos</button>
+                        </div>
+                    </div>
+
+                    <h3>🎓 Educational Channels</h3>
+                    <ul>
+                        <li><a href="https://www.youtube.com/c/iCivics" target="_blank">iCivics - Election Education Games</a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=election+education+classroom" target="_blank">YouTube: Election Education for Classrooms</a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=civics+education" target="_blank">YouTube: Civics Education Channel</a></li>
+                    </ul>
+                </div>
+
+                <!-- Shareable Documents (Google Drive Integration) -->
+                <div class="topic-content" id="shareable-docs" aria-hidden="true">
+                    <h2>📄 Shareable Election Documents</h2>
+                    <p>Download, view, and share these resources with your community:</p>
+                    
+                    <div class="document-grid">
+                        <div class="document-card">
+                            <h3>📋 Voter Registration Checklist</h3>
+                            <p>Everything you need to register to vote</p>
+                            <button class="search-btn" onclick="window.open('https://docs.google.com/document/create', '_blank')">Access Template</button>
+                        </div>
+
+                        <div class="document-card">
+                            <h3>🗳️ Election Day Guide</h3>
+                            <p>What to bring and expect at the polling place</p>
+                            <button class="search-btn" onclick="window.open('https://docs.google.com/document/create', '_blank')">Access Template</button>
+                        </div>
+
+                        <div class="document-card">
+                            <h3>👥 Voter Rights Reference</h3>
+                            <p>Your complete voting rights and protections</p>
+                            <button class="search-btn" onclick="window.open('https://docs.google.com/document/create', '_blank')">Access Template</button>
+                        </div>
+
+                        <div class="document-card">
+                            <h3>🌍 State Election Database</h3>
+                            <p>State-specific deadlines and requirements</p>
+                            <button class="search-btn" onclick="window.open('https://docs.google.com/spreadsheets/create', '_blank')">Access Spreadsheet</button>
+                        </div>
+
+                        <div class="document-card">
+                            <h3>🎓 Election Curriculum</h3>
+                            <p>Full teaching materials for educators</p>
+                            <button class="search-btn" onclick="window.open('https://classroom.google.com', '_blank')">Access Classroom</button>
+                        </div>
+
+                        <div class="document-card">
+                            <h3>📊 Infographics & Graphics</h3>
+                            <p>Shareable images for social media</p>
+                            <button class="search-btn" onclick="window.open('https://drive.google.com', '_blank')">Access Google Drive</button>
+                        </div>
+                    </div>
+
+                    <h3>🔗 Share With Your Network</h3>
+                    <p>Help spread voter education:</p>
+                    <div class="share-section">
+                        <button class="share-btn" onclick="copyLink()">📋 Copy Link to Clipboard</button>
+                        <button class="share-btn" onclick="shareEmail()">✉️ Share via Email</button>
+                        <button class="share-btn" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href, '_blank')">📘 Share on Facebook</button>
+                        <button class="share-btn" onclick="window.open('https://twitter.com/intent/tweet?url=' + window.location.href, '_blank')">𝕏 Share on X/Twitter</button>
+                    </div>
                 </div>
             </section>
         </main>

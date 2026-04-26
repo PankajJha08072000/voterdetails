@@ -604,3 +604,49 @@ function initializeGoogleTranslate() {
     }
 }
 
+/**
+ * Copy link to clipboard
+ * Copies the current page URL to user's clipboard
+ */
+function copyLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(function() {
+        alert('Link copied to clipboard!');
+        trackPageEvent('share_action', { action: 'copy_link' });
+    });
+}
+
+/**
+ * Share via email
+ * Opens email client with page information
+ */
+function shareEmail() {
+    const subject = 'Check out this Election Education Resource!';
+    const body = 'I found this helpful Election Education Assistant. You should check it out: ' + window.location.href;
+    window.location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    trackPageEvent('share_action', { action: 'share_email' });
+}
+
+/**
+ * Share on social media
+ * Opens social media share dialogs
+ * 
+ * @param {string} platform - The social media platform (twitter, facebook)
+ */
+function shareOnSocial(platform) {
+    const url = window.location.href;
+    const text = 'Learn about elections and voting at Election Education Assistant!';
+    
+    let shareUrl;
+    if (platform === 'twitter') {
+        shareUrl = 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
+    } else if (platform === 'facebook') {
+        shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+        trackPageEvent('share_action', { action: 'share_' + platform });
+    }
+}
+

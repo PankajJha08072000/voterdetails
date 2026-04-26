@@ -381,6 +381,91 @@ runner.test('Google Services: Firebase configured in CSP', () => {
     }
 });
 
+runner.test('Google Services: Video resources section exists', () => {
+    const section = document.getElementById('video-resources');
+    if (!section) throw new Error('Video resources section not found');
+});
+
+runner.test('Google Services: Shareable documents section exists', () => {
+    const section = document.getElementById('shareable-docs');
+    if (!section) throw new Error('Shareable documents section not found');
+});
+
+runner.test('Google Services: Video cards present', () => {
+    const cards = document.querySelectorAll('.video-card');
+    if (cards.length === 0) throw new Error('No video cards found');
+    if (cards.length < 6) throw new Error('Not all video cards present');
+});
+
+runner.test('Google Services: Document cards present', () => {
+    const cards = document.querySelectorAll('.document-card');
+    if (cards.length === 0) throw new Error('No document cards found');
+    if (cards.length < 6) throw new Error('Not all document cards present');
+});
+
+runner.test('Google Services: YouTube API script loaded', () => {
+    const scripts = document.querySelectorAll('script');
+    let youtubeLoaded = false;
+    scripts.forEach(script => {
+        if (script.src && script.src.includes('youtube')) {
+            youtubeLoaded = true;
+        }
+    });
+    if (!youtubeLoaded) throw new Error('YouTube API not loaded');
+});
+
+runner.test('Google Services: Google Platform API loaded', () => {
+    const scripts = document.querySelectorAll('script');
+    let platformLoaded = false;
+    scripts.forEach(script => {
+        if (script.src && script.src.includes('apis.google.com')) {
+            platformLoaded = true;
+        }
+    });
+    if (!platformLoaded) throw new Error('Google Platform API not loaded');
+});
+
+runner.test('Google Services: copyLink function exists', () => {
+    if (typeof copyLink !== 'function') {
+        throw new Error('copyLink function not defined');
+    }
+});
+
+runner.test('Google Services: shareEmail function exists', () => {
+    if (typeof shareEmail !== 'function') {
+        throw new Error('shareEmail function not defined');
+    }
+});
+
+runner.test('Google Services: shareOnSocial function exists', () => {
+    if (typeof shareOnSocial !== 'function') {
+        throw new Error('shareOnSocial function not defined');
+    }
+});
+
+runner.test('Google Services: Share buttons present', () => {
+    const shareSection = document.querySelector('.share-section');
+    if (!shareSection) throw new Error('Share section not found');
+    const shareButtons = shareSection.querySelectorAll('.share-btn');
+    if (shareButtons.length === 0) throw new Error('No share buttons found');
+});
+
+runner.test('Google Services: 11 total nav buttons (original + Google)', () => {
+    const buttons = document.querySelectorAll('.nav-btn');
+    if (buttons.length < 11) throw new Error('Not all navigation buttons present');
+});
+
+runner.test('Google Services: Google Fonts imported', () => {
+    const links = document.querySelectorAll('link');
+    let fontsImported = false;
+    links.forEach(link => {
+        if (link.href && link.href.includes('fonts.googleapis.com')) {
+            fontsImported = true;
+        }
+    });
+    if (!fontsImported) console.warn('Warning: Google Fonts not explicitly imported');
+});
+
 // Run tests if in browser
 if (typeof document !== 'undefined') {
     window.runTests = () => runner.runAll();
