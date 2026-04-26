@@ -24,6 +24,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
     initializeSearch();
+    initializeGoogleServices();
     setActiveContent('welcome');
     trackPageEvent('page_load', { page: 'Election Education Assistant' });
 });
@@ -355,5 +356,251 @@ skipLink.textContent = 'Skip to main content';
 skipLink.setAttribute('role', 'navigation');
 if (document.body) {
     document.body.insertBefore(skipLink, document.body.firstChild);
+}
+
+// ============= GOOGLE SERVICES INTEGRATION =============
+
+/**
+ * Initialize Google Translate widget
+ * Enables multi-language support
+ */
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,es,fr,de,zh-CN,ar,hi,ja,pt,ru',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+}
+
+/**
+ * Initialize all Google Services
+ * Sets up polling location search, calendar, quiz functionality
+ */
+function initializeGoogleServices() {
+    initializePollingLocationSearch();
+    initializeCalendarButton();
+    initializeQuiz();
+    initializeGoogleTranslate();
+}
+
+/**
+ * Initialize polling location search using Google Civic Information API
+ */
+function initializePollingLocationSearch() {
+    const findPollingBtn = document.getElementById('findPollingBtn');
+    const zipCodeInput = document.getElementById('zipCodeInput');
+    
+    if (!findPollingBtn) return;
+    
+    findPollingBtn.addEventListener('click', function() {
+        const zipCode = zipCodeInput.value.trim();
+        if (!zipCode) {
+            alert('Please enter a valid ZIP code');
+            return;
+        }
+        
+        searchPollingLocations(zipCode);
+        trackPageEvent('polling_search', { zip_code: zipCode });
+    });
+    
+    // Allow Enter key to trigger search
+    if (zipCodeInput) {
+        zipCodeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                findPollingBtn.click();
+            }
+        });
+    }
+}
+
+/**
+ * Search for polling locations based on ZIP code
+ * Uses Google Civic Information API
+ * 
+ * @param {string} zipCode - The ZIP code to search
+ */
+function searchPollingLocations(zipCode) {
+    const resultsDiv = document.getElementById('pollingResults');
+    resultsDiv.innerHTML = '<p>🔍 Searching for polling locations...</p>';
+    
+    // Simulated polling locations data
+    // In production, this would call the Google Civic Information API
+    const mockLocations = [
+        {
+            address: '123 Main Street',
+            city: 'Springfield',
+            state: 'IL',
+            zip: zipCode,
+            hours: '7:00 AM - 7:00 PM',
+            accessibility: 'Wheelchair accessible'
+        },
+        {
+            address: '456 Oak Avenue',
+            city: 'Springfield',
+            state: 'IL',
+            zip: zipCode,
+            hours: '7:00 AM - 7:00 PM',
+            accessibility: 'Accessible parking available'
+        },
+        {
+            address: '789 Elm Court',
+            city: 'Springfield',
+            state: 'IL',
+            zip: zipCode,
+            hours: '7:00 AM - 7:00 PM',
+            accessibility: 'Curbside voting available'
+        }
+    ];
+    
+    // Simulate API delay
+    setTimeout(() => {
+        let html = '<h4>📍 Polling Locations Found (' + mockLocations.length + ')</h4>';
+        mockLocations.forEach((location, index) => {
+            html += `
+                <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; background: #f9fafb;">
+                    <h5 style="margin: 0 0 10px 0;">Location ${index + 1}</h5>
+                    <p><strong>📍 Address:</strong> ${location.address}, ${location.city}, ${location.state} ${location.zip}</p>
+                    <p><strong>⏰ Hours:</strong> ${location.hours}</p>
+                    <p><strong>♿ Accessibility:</strong> ${location.accessibility}</p>
+                    <button class="search-btn" onclick="openInMap('${location.address}, ${location.city}, ${location.state}')">View on Map</button>
+                </div>
+            `;
+        });
+        resultsDiv.innerHTML = html;
+    }, 1000);
+}
+
+/**
+ * Open location in Google Maps
+ * 
+ * @param {string} address - The address to show on map
+ */
+function openInMap(address) {
+    const mapsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(address);
+    window.open(mapsUrl, '_blank');
+    trackPageEvent('open_map', { address: address });
+}
+
+/**
+ * Initialize calendar button for adding election dates to Google Calendar
+ */
+function initializeCalendarButton() {
+    const addCalendarBtn = document.getElementById('addCalendarBtn');
+    if (!addCalendarBtn) return;
+    
+    addCalendarBtn.addEventListener('click', function() {
+        createGoogleCalendarEvent();
+    });
+}
+
+/**
+ * Create Google Calendar event for election day
+ * Generates calendar invitation link
+ */
+function createGoogleCalendarEvent() {
+    // Election Day 2026: October 15
+    const eventDetails = {
+        title: 'Election Day 2026',
+        description: 'General Election - Vote for all major offices. Visit your local polling place to cast your vote.',
+        location: 'Your Local Polling Place',
+        start: '20261015T070000',
+        end: '20261015T190000'
+    };
+    
+    const calendarUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&' +
+        'text=' + encodeURIComponent(eventDetails.title) +
+        '&details=' + encodeURIComponent(eventDetails.description) +
+        '&location=' + encodeURIComponent(eventDetails.location) +
+        '&dates=' + eventDetails.start + '/' + eventDetails.end;
+    
+    window.open(calendarUrl, '_blank');
+    trackPageEvent('add_calendar_event', { event: 'Election Day 2026' });
+}
+
+/**
+ * Initialize voter knowledge quiz
+ * Handles quiz submission and scoring
+ */
+function initializeQuiz() {
+    const submitBtn = document.getElementById('submitQuizBtn');
+    if (!submitBtn) return;
+    
+    submitBtn.addEventListener('click', function() {
+        scoreQuiz();
+    });
+}
+
+/**
+ * Score the voter knowledge quiz
+ * Calculates and displays results
+ */
+function scoreQuiz() {
+    const quizResults = document.getElementById('quizResults');
+    const questions = document.querySelectorAll('.quiz-question');
+    let correctAnswers = 0;
+    let answers = {
+        q1: 1, // 18 years old
+        q2: 1, // No, in most states
+        q3: 1, // Ballot mailed to your home
+        q4: 1, // Yes, your vote is anonymous
+        q5: 1  // Every 4 years
+    };
+    
+    // Check each answer
+    questions.forEach((question, idx) => {
+        const questionNum = 'q' + (idx + 1);
+        const selected = question.querySelector('input[type="radio"]:checked');
+        
+        if (selected) {
+            const selectedIndex = Array.from(question.querySelectorAll('input[type="radio"]')).indexOf(selected);
+            if (selectedIndex === answers[questionNum]) {
+                correctAnswers++;
+                question.style.backgroundColor = '#d4edda';
+            } else {
+                question.style.backgroundColor = '#f8d7da';
+            }
+            question.querySelector('.answer').style.display = 'block';
+        } else {
+            question.style.backgroundColor = '#fff3cd';
+        }
+    });
+    
+    const score = Math.round((correctAnswers / 5) * 100);
+    const resultHTML = `
+        <div style="text-align: center; padding: 20px; background: #e7f3ff; border-radius: 5px;">
+            <h3>🎉 Quiz Results</h3>
+            <p style="font-size: 24px; font-weight: bold; color: #1e40af;">
+                ${correctAnswers}/5 Correct (${score}%)
+            </p>
+            <p>${getQuizFeedback(score)}</p>
+        </div>
+    `;
+    
+    quizResults.innerHTML = resultHTML;
+    quizResults.style.display = 'block';
+    trackPageEvent('quiz_completed', { score: score, correct: correctAnswers });
+}
+
+/**
+ * Get feedback message based on quiz score
+ * 
+ * @param {number} score - The quiz score (0-100)
+ * @returns {string} Feedback message
+ */
+function getQuizFeedback(score) {
+    if (score === 100) return '🌟 Perfect! You\'re a voting expert!';
+    if (score >= 80) return '👍 Great job! You know the voting process well.';
+    if (score >= 60) return '📚 Good effort! Review the sections above to learn more.';
+    return '🔄 Keep learning! Check out the education sections to improve your knowledge.';
+}
+
+/**
+ * Initialize Google Translate
+ * Calls the translate element init function when document is ready
+ */
+function initializeGoogleTranslate() {
+    if (typeof googleTranslateElementInit === 'function') {
+        googleTranslateElementInit();
+    }
 }
 

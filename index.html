@@ -11,7 +11,7 @@
     
     <!-- Security Headers -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' www.googletagmanager.com www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: www.google-analytics.com; connect-src 'self' www.google-analytics.com www.googletagmanager.com">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' www.googletagmanager.com www.google-analytics.com www.google.com www.gstatic.com maps.googleapis.com translate.google.com translate.googleapis.com www.youtube.com firebaseapp.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com translate.google.com; img-src 'self' data: www.google-analytics.com maps.googleapis.com maps.gstatic.com www.gstatic.com; connect-src 'self' www.google-analytics.com www.googletagmanager.com www.googleapis.com maps.googleapis.com www.google.com translate.googleapis.com firebaseapp.com">
     
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
@@ -28,6 +28,11 @@
     <!-- Title & Styles -->
     <title>Election Education Assistant - Learn About Voting & Elections</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Translate API -->
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </head>
 <body>
     <div class="container">
@@ -36,6 +41,10 @@
             <div class="header-content">
                 <h1>🗳️ Election Education Assistant</h1>
                 <p>Learn about election processes, timelines, and voting in an interactive way</p>
+            </div>
+            <!-- Google Translate Widget -->
+            <div class="language-selector">
+                <div id="google_translate_element"></div>
             </div>
         </header>
 
@@ -59,6 +68,11 @@
                     <button class="nav-btn" data-topic="voter-rights">Voter Rights</button>
                     <button class="nav-btn" data-topic="election-types">Election Types</button>
                     <button class="nav-btn" data-topic="faq">FAQ</button>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #ccc;">
+                    <h3>Google Services</h3>
+                    <button class="nav-btn" data-topic="polling-locations">Find Polling Locations</button>
+                    <button class="nav-btn" data-topic="election-timeline-calendar">Election Calendar</button>
+                    <button class="nav-btn" data-topic="voter-quiz">Voter Knowledge Quiz</button>
                 </nav>
             </aside>
 
@@ -497,6 +511,164 @@
                         <h3>❓ Can I vote if I have a criminal record?</h3>
                         <p>It depends on your state and the conviction. Some states restore voting rights after completing sentences; others have different rules. Contact your state election office.</p>
                     </div>
+                </div>
+
+                <!-- Polling Locations (Google Maps Integration) -->
+                <div class="topic-content" id="polling-locations" aria-hidden="true">
+                    <h2>Find Your Polling Location</h2>
+                    <p>Use the tools below to find where you can vote:</p>
+                    
+                    <div class="polling-search">
+                        <input type="text" id="zipCodeInput" placeholder="Enter your ZIP code" aria-label="ZIP code for polling location">
+                        <button id="findPollingBtn" class="search-btn">Find Polling Locations</button>
+                    </div>
+                    
+                    <div id="pollingResults" style="margin-top: 20px;"></div>
+                    
+                    <h3>📍 Alternative Options</h3>
+                    <p>Can't find your polling location? Try these resources:</p>
+                    <ul>
+                        <li><strong>Vote411.org</strong> - Nonpartisan voter guide</li>
+                        <li><strong>Ballotpedia.org</strong> - Election information by location</li>
+                        <li><strong>State Election Office</strong> - Official government resource</li>
+                        <li><strong>Google Maps</strong> - Search "polling places near me"</li>
+                    </ul>
+
+                    <h3>🎫 What to Bring</h3>
+                    <ul>
+                        <li>Valid photo ID (requirements vary by state)</li>
+                        <li>Your voter registration card (helpful but not always required)</li>
+                        <li>Sample ballot (optional, for reference)</li>
+                    </ul>
+
+                    <h3>⏰ Polling Hours</h3>
+                    <p>Most polling places are open from 7 AM to 7 PM on Election Day, but check your local rules.</p>
+                </div>
+
+                <!-- Election Timeline Calendar (Google Calendar Integration) -->
+                <div class="topic-content" id="election-timeline-calendar" aria-hidden="true">
+                    <h2>Election Timeline & Important Dates</h2>
+                    <p>Here are the key dates for the 2026 election cycle:</p>
+                    
+                    <div class="timeline-visual">
+                        <div class="timeline-item">
+                            <div class="timeline-date">January 2026</div>
+                            <div class="timeline-content">
+                                <h4>Early Planning</h4>
+                                <p>Candidates begin forming committees and planning campaigns</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">March 2026</div>
+                            <div class="timeline-content">
+                                <h4>Primary Announcements</h4>
+                                <p>States announce official primary election dates</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">April-June 2026</div>
+                            <div class="timeline-content">
+                                <h4>State Primaries & Caucuses</h4>
+                                <p>Voters choose preferred candidates by state</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">August 2026</div>
+                            <div class="timeline-content">
+                                <h4>Party Conventions</h4>
+                                <p>Major parties formally nominate their candidates</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">September-October 2026</div>
+                            <div class="timeline-content">
+                                <h4>General Campaign</h4>
+                                <p>Intensive campaigning and candidate debates</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">October 15, 2026</div>
+                            <div class="timeline-content">
+                                <h4>🗳️ ELECTION DAY</h4>
+                                <p><strong>General election</strong> - Vote for all major offices</p>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-date">November 2026</div>
+                            <div class="timeline-content">
+                                <h4>Vote Certification</h4>
+                                <p>Election results certified and candidates take office</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>📅 Add to Your Calendar</h3>
+                    <p>Subscribe to election notifications to get reminders for important dates:</p>
+                    <button id="addCalendarBtn" class="search-btn">Add to Google Calendar</button>
+                </div>
+
+                <!-- Voter Knowledge Quiz (Google Forms Integration) -->
+                <div class="topic-content" id="voter-quiz" aria-hidden="true">
+                    <h2>Test Your Voter Knowledge</h2>
+                    <p>See how much you've learned! Take our interactive quiz:</p>
+                    
+                    <div class="quiz-container">
+                        <h3>Quick Self-Assessment Quiz</h3>
+                        <p>Answer these questions to test your knowledge:</p>
+
+                        <div class="quiz-question">
+                            <h4>1. What is the minimum age requirement to vote?</h4>
+                            <label><input type="radio" name="q1"> 16 years old</label>
+                            <label><input type="radio" name="q1"> 18 years old</label>
+                            <label><input type="radio" name="q1"> 21 years old</label>
+                            <p class="answer" style="display:none;">✓ Correct: 18 years old</p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>2. Can you bring your phone into the voting booth?</h4>
+                            <label><input type="radio" name="q2"> Yes, always</label>
+                            <label><input type="radio" name="q2"> No, in most states</label>
+                            <label><input type="radio" name="q2"> Only with permission</label>
+                            <p class="answer" style="display:none;">✓ Correct: No, in most states</p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>3. What is a mail-in ballot?</h4>
+                            <label><input type="radio" name="q3"> A ballot sent by email</label>
+                            <label><input type="radio" name="q3"> A ballot mailed to your home for voting early</label>
+                            <label><input type="radio" name="q3"> A ballot you can buy at the post office</label>
+                            <p class="answer" style="display:none;">✓ Correct: A ballot mailed to your home for voting early</p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>4. Is your vote secret?</h4>
+                            <label><input type="radio" name="q4"> No, election officials know</label>
+                            <label><input type="radio" name="q4"> Yes, your vote is anonymous</label>
+                            <label><input type="radio" name="q4"> Only if you request it</label>
+                            <p class="answer" style="display:none;">✓ Correct: Yes, your vote is anonymous</p>
+                        </div>
+
+                        <div class="quiz-question">
+                            <h4>5. How often are presidential elections held?</h4>
+                            <label><input type="radio" name="q5"> Every 2 years</label>
+                            <label><input type="radio" name="q5"> Every 4 years</label>
+                            <label><input type="radio" name="q5"> Every 6 years</label>
+                            <p class="answer" style="display:none;">✓ Correct: Every 4 years</p>
+                        </div>
+
+                        <button id="submitQuizBtn" class="search-btn" style="margin-top: 20px;">Submit Quiz</button>
+                        <div id="quizResults" style="margin-top: 20px; display:none;"></div>
+                    </div>
+
+                    <h3>📊 Full Survey</h3>
+                    <p>Want to provide feedback or take a more comprehensive assessment? Fill out our Google Form:</p>
+                    <iframe id="googleFormFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSeUqYxDx5JZqvxZ4sPm-QXKqzxDKb7q4qZqvzDKb7q4qZqvzD/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0" title="Election Education Feedback Form">Loading…</iframe>
                 </div>
             </section>
         </main>

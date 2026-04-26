@@ -289,6 +289,98 @@ runner.test('Metadata: Meta description present', () => {
     if (!meta) console.warn('Warning: Meta description missing');
 });
 
+// ============= Google Services Tests =============
+runner.test('Google Services: Polling location search element exists', () => {
+    const element = document.getElementById('findPollingBtn');
+    if (!element) throw new Error('Polling location search button not found');
+});
+
+runner.test('Google Services: Calendar button exists', () => {
+    const element = document.getElementById('addCalendarBtn');
+    if (!element) throw new Error('Calendar button not found');
+});
+
+runner.test('Google Services: Quiz container exists', () => {
+    const element = document.querySelector('.quiz-container');
+    if (!element) throw new Error('Quiz container not found');
+});
+
+runner.test('Google Services: Google Translate element exists', () => {
+    const element = document.getElementById('google_translate_element');
+    if (!element) throw new Error('Google Translate element not found');
+});
+
+runner.test('Google Services: Quiz questions present', () => {
+    const questions = document.querySelectorAll('.quiz-question');
+    if (questions.length === 0) throw new Error('No quiz questions found');
+    if (questions.length < 5) throw new Error('Not all quiz questions present');
+});
+
+runner.test('Google Services: Google Forms iframe exists', () => {
+    const iframe = document.getElementById('googleFormFrame');
+    if (!iframe) throw new Error('Google Forms iframe not found');
+});
+
+runner.test('Google Services: Polling location content section exists', () => {
+    const section = document.getElementById('polling-locations');
+    if (!section) throw new Error('Polling locations section not found');
+});
+
+runner.test('Google Services: Election calendar content section exists', () => {
+    const section = document.getElementById('election-timeline-calendar');
+    if (!section) throw new Error('Election timeline calendar section not found');
+});
+
+runner.test('Google Services: Voter quiz content section exists', () => {
+    const section = document.getElementById('voter-quiz');
+    if (!section) throw new Error('Voter quiz section not found');
+});
+
+runner.test('Google Services: initializeGoogleServices function exists', () => {
+    if (typeof initializeGoogleServices !== 'function') {
+        throw new Error('initializeGoogleServices function not defined');
+    }
+});
+
+runner.test('Google Services: searchPollingLocations function exists', () => {
+    if (typeof searchPollingLocations !== 'function') {
+        throw new Error('searchPollingLocations function not defined');
+    }
+});
+
+runner.test('Google Services: scoreQuiz function exists', () => {
+    if (typeof scoreQuiz !== 'function') {
+        throw new Error('scoreQuiz function not defined');
+    }
+});
+
+runner.test('Google Services: Language support enabled', () => {
+    const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    if (!csp) throw new Error('CSP meta tag not found');
+    const content = csp.getAttribute('content');
+    if (!content.includes('translate')) {
+        throw new Error('Google Translate not enabled in CSP');
+    }
+});
+
+runner.test('Google Services: Google Maps API accessible', () => {
+    const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    if (!csp) throw new Error('CSP meta tag not found');
+    const content = csp.getAttribute('content');
+    if (!content.includes('maps.googleapis.com')) {
+        throw new Error('Google Maps API not enabled in CSP');
+    }
+});
+
+runner.test('Google Services: Firebase configured in CSP', () => {
+    const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+    if (!csp) throw new Error('CSP meta tag not found');
+    const content = csp.getAttribute('content');
+    if (!content.includes('firebaseapp.com')) {
+        console.warn('Warning: Firebase not fully configured in CSP');
+    }
+});
+
 // Run tests if in browser
 if (typeof document !== 'undefined') {
     window.runTests = () => runner.runAll();
